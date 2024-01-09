@@ -86,6 +86,7 @@ interface ConnectionStuff {
 	pushToTalkMode: number;
 	deafened: boolean;
 	muted: boolean;
+	MuteOtherDeadPlayers: boolean;
 	impostorRadio: boolean | null;
 	toggleMute: () => void;
 	toggleDeafen: () => void;
@@ -370,6 +371,9 @@ const Voice: React.FC<VoiceProps> = function ({ t, error: initialError }: VoiceP
 				panPos = [0, 0];
 				endGain = 1;
 				if (!me.isDead && other.isDead) {
+					endGain = 0;
+				}
+				if (me.isDead && other.isDead && connectionStuff.current.muted && connectionStuff.current.MuteOtherDeadPlayers) {
 					endGain = 0;
 				}
 				break;
@@ -720,6 +724,7 @@ const Voice: React.FC<VoiceProps> = function ({ t, error: initialError }: VoiceP
 		deafened: false,
 		muted: false,
 		impostorRadio: null,
+		MuteOtherDeadPlayers: true,
 		toggleMute: () => {
 			/*empty*/
 		},
@@ -937,6 +942,17 @@ const Voice: React.FC<VoiceProps> = function ({ t, error: initialError }: VoiceP
 			ipcRenderer.on(IpcRendererMessages.IMPOSTOR_RADIO, (_: unknown, pressing: boolean) => {
 				connectionStuff.current.impostorRadio = pressing;
 			});
+
+			ipcRenderer.on(IpcRendererMessages.MUTE_OTHER_DEAD_PLAYERS, (_: unknown) =>{
+				if (connectionStuff.current.MuteOtherDeadPlayers)
+				{
+					connectionStuff.current.MuteOtherDeadPlayers = false;
+				}
+				else
+				{
+					connectionStuff.current.MuteOtherDeadPlayers = true;
+				}
+			})
 
 			ipcRenderer.on(IpcRendererMessages.TOGGLE_MUTE, connectionStuff.current.toggleMute);
 			ipcRenderer.on(IpcRendererMessages.PUSH_TO_TALK, (_: unknown, pressing: boolean) => {

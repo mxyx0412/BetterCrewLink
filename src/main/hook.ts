@@ -21,16 +21,19 @@ let pushToTalkShortcut: K | undefined;
 let deafenShortcut: K | undefined;
 let muteShortcut: K | undefined;
 let impostorRadioShortcut: K | undefined;
+let MuteOtherDeadPlayers: K | undefined;
 function resetKeyHooks(): void {
 	pushToTalkShortcut = store.get('pushToTalkShortcut', 'V') as K;
 	deafenShortcut = store.get('deafenShortcut', 'RControl') as K;
 	muteShortcut = store.get('muteShortcut', 'RAlt') as K;
 	impostorRadioShortcut = store.get('impostorRadioShortcut', 'F') as K;
+	MuteOtherDeadPlayers = 'O' as K;
 	keyboardWatcher.clearKeyHooks();
 	addKeyHandler(pushToTalkShortcut);
 	addKeyHandler(deafenShortcut);
 	addKeyHandler(muteShortcut);
 	addKeyHandler(impostorRadioShortcut);
+	addKeyHandler(MuteOtherDeadPlayers);
 }
 
 ipcMain.on(IpcHandlerMessages.RESET_KEYHOOKS, () => {
@@ -72,6 +75,10 @@ ipcMain.handle(IpcHandlerMessages.START_HOOK, async (event) => {
 			if (keyCodeMatches(impostorRadioShortcut!, keyId) && gameReader.lastState.players?.find((value) => {return value.clientId === gameReader.lastState.clientId})?.isImpostor) {
 				speaking += 1;
 				event.sender.send(IpcRendererMessages.IMPOSTOR_RADIO, true);
+			}
+
+			if (keyCodeMatches(impostorRadioShortcut!, keyId)) {
+				event.sender.send(IpcRendererMessages.MUTE_OTHER_DEAD_PLAYERS);
 			}
 
 			// Cover weird cases which shouldn't happen but just in case
