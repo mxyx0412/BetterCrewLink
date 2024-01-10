@@ -19,6 +19,9 @@ jobs:
          - os: windows-latest
            dist: 'dist:64'
            installer: 'dist/Better-CrewLink Setup*.exe'
+         - os: windows-latest
+           dist: 'dist:all'
+           installer: 'dist/Better-CrewLink Setup*.exe'
          - os: ubuntu-latest
            dist: 'dist:linux'
            installer: 'dist/Better-CrewLink-*.AppImage'
