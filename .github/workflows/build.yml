@@ -14,7 +14,10 @@ jobs:
       matrix:
         include:
          - os: windows-latest
-           dist: 'dist'
+           dist: 'dist:32'
+           installer: 'dist/Better-CrewLink Setup*.exe'
+         - os: windows-latest
+           dist: 'dist:64'
            installer: 'dist/Better-CrewLink Setup*.exe'
          - os: ubuntu-latest
            dist: 'dist:linux'
@@ -53,10 +56,3 @@ jobs:
           name: BetterCrewLink Installer ${{ runner.os }}
           path: ${{ matrix.installer }}
           if-no-files-found: error
-          
-      - name: Upload Unpacked
-        uses: actions/upload-artifact@v2
-        if: ${{ matrix.os == 'windows-latest'}}
-        with:
-          name: BetterCrewLink Unpacked 64bit 
-          path: 'dist/win-unpacked'
