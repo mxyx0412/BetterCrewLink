@@ -53,6 +53,6 @@ jobs:
       - name: Upload Installer
         uses: actions/upload-artifact@v2
         with:
-          name: BetterCrewLink Installer ${{ runner.os }}
+          name: BetterCrewLink Installer ${{ runner.os }} ${{ matrix.dist }}
           path: ${{ matrix.installer }}
           if-no-files-found: error
