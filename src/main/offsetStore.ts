@@ -138,17 +138,16 @@ interface IOffsetsStore {
 }
 //// "https://cdn.jsdelivr.net/gh/OhMyGuus/BetterCrewlink-Offsets@main/"; // "https://raw.githubusercontent.com/OhMyGuus/BetterCrewlink-Offsets/main"
 
-const BASE_URL = "https://offsets.mxyx.club";
-const BASE_URL_error_error = "https://github.moeyy.xyz/https://raw.githubusercontent.com/OhMyGuus/BetterCrewlink-Offsets/main";
-const BASE_URL_error = "https://raw.githubusercontent.com/OhMyGuus/BetterCrewlink-Offsets/main";
+const BASE_URL = "https://raw.githubusercontent.com/OhMyGuus/BetterCrewlink-Offsets/main";
+const BASE_URL_error = "https://github.moeyy.xyz/https://raw.githubusercontent.com/OhMyGuus/BetterCrewlink-Offsets/main";
 
 const store = new Store<IOffsetsStore>({name: "offsets"});
 const lookupStore = new Store<IOffsetsLookup>({name: "lookup"});
 
-async function fetchOffsetLookupJson(error: boolean = false, error2: boolean = false): Promise<IOffsetsLookup> {
+async function fetchOffsetLookupJson(error: boolean = false): Promise<IOffsetsLookup> {
 	const GetUrl = SettingsStore.get('CDN_Url', 'nullUrl');
 	const CDN_Url = GetUrl == 'nullUrl' ? BASE_URL : GetUrl;
-	const url = (error2 ? BASE_URL_error_error : (error ? BASE_URL_error : CDN_Url));
+	const url = error ? BASE_URL_error : CDN_Url;
     return fetch(`${url}/lookup.json`)
         .then((response) => response.json())
         .then((data) => { return data as IOffsetsLookup })
@@ -156,11 +155,7 @@ async function fetchOffsetLookupJson(error: boolean = false, error2: boolean = f
             if (!error) {
                 return fetchOffsetLookupJson(true);
             } else {
-				if (!error2) {
-					return fetchOffsetLookupJson(true, true);
-				} else {
-					throw Errors.LOOKUP_FETCH_ERROR;
-				}
+				throw Errors.LOOKUP_FETCH_ERROR;
             }
         });
 }
@@ -177,10 +172,10 @@ export async function fetchOffsetLookup(): Promise<IOffsetsLookup> {
 	}
 }
 
-async function fetchOffsetsJson(is_64bit: boolean, filename: string, error: boolean = false, error2: boolean = false): Promise<IOffsets> {
+async function fetchOffsetsJson(is_64bit: boolean, filename: string, error: boolean = false): Promise<IOffsets> {
 	const GetUrl = SettingsStore.get('CDN_Url', 'nullUrl');
 	const CDN_Url = GetUrl == 'nullUrl' ? BASE_URL : GetUrl;
-	const url = (error2 ? BASE_URL_error_error : (error ? BASE_URL_error : CDN_Url));
+	const url = error ? BASE_URL_error : CDN_Url;
     const OFFSETS_URL = `${url}/offsets`;
     return fetch(`${OFFSETS_URL}/${is_64bit ? 'x64' : 'x86'}/${filename}`)
         .then((response) => response.json())
@@ -189,14 +184,7 @@ async function fetchOffsetsJson(is_64bit: boolean, filename: string, error: bool
             if (!error) {
                 return fetchOffsetsJson(is_64bit, filename, true);
             } else {
-				if(!error2)
-				{
-					return fetchOffsetsJson(is_64bit, filename, true, true);
-				}
-				else
-				{
-					throw Errors.OFFSETS_FETCH_ERROR;
-				}
+				throw Errors.OFFSETS_FETCH_ERROR;
             }
         });
 }
