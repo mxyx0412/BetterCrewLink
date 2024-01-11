@@ -367,6 +367,7 @@ const Voice: React.FC<VoiceProps> = function ({ t, error: initialError }: VoiceP
 					}
 				}
 				break;
+
 			case GameState.DISCUSSION:
 				panPos = [0, 0];
 				endGain = 1;

@@ -120,6 +120,14 @@ export const SettingsStore = new Store<ISettings>({
 			default: 'https://bettercrewl.ink',
 			format: 'uri',
 		},
+		CDN_Url:{
+			type: 'string',
+			default: 'nullUrl',
+		},
+		Cosmetics_Url:{
+			type: 'string',
+			default: 'nullUrl',
+		},
 		pushToTalkShortcut: {
 			type: 'string',
 			default: 'V',

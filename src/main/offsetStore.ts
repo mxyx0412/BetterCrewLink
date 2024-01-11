@@ -1,6 +1,7 @@
 import Store from 'electron-store';
 import fetch from 'node-fetch';
 import Errors from '../common/Errors';
+import SettingsStore from '../renderer/settings/SettingsStore';
 
 export interface IOffsetsLookup {
 	patterns: {
@@ -145,7 +146,9 @@ const store = new Store<IOffsetsStore>({name: "offsets"});
 const lookupStore = new Store<IOffsetsLookup>({name: "lookup"});
 
 async function fetchOffsetLookupJson(error: boolean = false, error2: boolean = false): Promise<IOffsetsLookup> {
-    const url = (error2 ? BASE_URL_error_error : (error ? BASE_URL_error : BASE_URL));
+	const GetUrl = SettingsStore.get('CDN_Url', 'nullUrl');
+	const CDN_Url = GetUrl == 'nullUrl' ? BASE_URL : GetUrl;
+	const url = (error2 ? BASE_URL_error_error : (error ? BASE_URL_error : CDN_Url));
     return fetch(`${url}/lookup.json`)
         .then((response) => response.json())
         .then((data) => { return data as IOffsetsLookup })
@@ -175,7 +178,9 @@ export async function fetchOffsetLookup(): Promise<IOffsetsLookup> {
 }
 
 async function fetchOffsetsJson(is_64bit: boolean, filename: string, error: boolean = false, error2: boolean = false): Promise<IOffsets> {
-	const url = (error2 ? BASE_URL_error_error : (error ? BASE_URL_error : BASE_URL));
+	const GetUrl = SettingsStore.get('CDN_Url', 'nullUrl');
+	const CDN_Url = GetUrl == 'nullUrl' ? BASE_URL : GetUrl;
+	const url = (error2 ? BASE_URL_error_error : (error ? BASE_URL_error : CDN_Url));
     const OFFSETS_URL = `${url}/offsets`;
     return fetch(`${OFFSETS_URL}/${is_64bit ? 'x64' : 'x86'}/${filename}`)
         .then((response) => response.json())
