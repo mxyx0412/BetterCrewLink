@@ -78,7 +78,7 @@ ipcMain.handle(IpcHandlerMessages.START_HOOK, async (event) => {
 				event.sender.send(IpcRendererMessages.IMPOSTOR_RADIO, true);
 			}
 
-			if (keyCodeMatches(MuteOtherDeadPlayers_Key, keyId)) {
+			if (keyCodeMatches(MuteOtherDeadPlayers_Key!, keyId)) {
 				event.sender.send(IpcRendererMessages.MUTE_OTHER_DEAD_PLAYERS);
 			}
 
