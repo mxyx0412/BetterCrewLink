@@ -84,7 +84,7 @@ const TestMicrophoneButton: React.FC<TestMicProps> = function ({ microphone }: T
 	}, [microphone]);
 
 	if (error) {
-		return <Typography color="error">Could not connect to microphone</Typography>;
+		return <Typography color="error">不能连接麦克风</Typography>;
 	} else {
 		return (
 			<div className={classes.root}>

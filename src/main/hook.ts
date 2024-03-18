@@ -21,19 +21,19 @@ let pushToTalkShortcut: K | undefined;
 let deafenShortcut: K | undefined;
 let muteShortcut: K | undefined;
 let impostorRadioShortcut: K | undefined;
-let MuteOtherDeadPlayers_Key: K | undefined;
+let muteOtherDeadPlayers_Key: K | undefined;
 function resetKeyHooks(): void {
 	pushToTalkShortcut = store.get('pushToTalkShortcut', 'V') as K;
 	deafenShortcut = store.get('deafenShortcut', 'RControl') as K;
 	muteShortcut = store.get('muteShortcut', 'RAlt') as K;
 	impostorRadioShortcut = store.get('impostorRadioShortcut', 'F') as K;
-	MuteOtherDeadPlayers_Key = 'M' as K;
+	muteOtherDeadPlayers_Key = 'M' as K;
 	keyboardWatcher.clearKeyHooks();
 	addKeyHandler(pushToTalkShortcut);
 	addKeyHandler(deafenShortcut);
 	addKeyHandler(muteShortcut);
 	addKeyHandler(impostorRadioShortcut);
-	addKeyHandler(MuteOtherDeadPlayers_Key);
+	addKeyHandler(muteOtherDeadPlayers_Key);
 }
 
 ipcMain.on(IpcHandlerMessages.RESET_KEYHOOKS, () => {
@@ -78,7 +78,7 @@ ipcMain.handle(IpcHandlerMessages.START_HOOK, async (event) => {
 				event.sender.send(IpcRendererMessages.IMPOSTOR_RADIO, true);
 			}
 
-			if (keyCodeMatches(MuteOtherDeadPlayers_Key!, keyId)) {
+			if (keyCodeMatches(muteOtherDeadPlayers_Key!, keyId)) {
 				event.sender.send(IpcRendererMessages.MUTE_OTHER_DEAD_PLAYERS);
 			}
 

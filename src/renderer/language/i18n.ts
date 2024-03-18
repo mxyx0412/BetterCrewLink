@@ -8,8 +8,8 @@ i18n
 	.use(reactI18nextModule) // pas
 	.init({
 		resources: languages,
-		defaultLocale: 'en',
-		fallbackLng: 'en',
+		defaultLocale: 'zh_CN',
+		fallbackLng: 'zh_CN',
 		debug: false,
 		interpolation: {
 			escapeValue: false, // not needed for react!!

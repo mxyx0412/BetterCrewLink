@@ -51,7 +51,7 @@ function createMainWindow() {
 	const mainWindowState = windowStateKeeper({});
 
 	const window = new BrowserWindow({
-		title: 'BetterCrewLink',
+		title: 'BetterCrewLink-沫夏悠轩',
 		width: 250,
 		height: 350,
 		maxWidth: 250,
@@ -124,7 +124,7 @@ function createMainWindow() {
 
 function createLobbyBrowser() {
 	const window = new BrowserWindow({
-		title: 'BetterCrewLink Browser',
+		title: 'BetterCrewLink-沫夏悠轩 Browser',
 		width: 900,
 		height: 500,
 		minWidth: 250,
@@ -171,7 +171,7 @@ function createLobbyBrowser() {
 
 function createOverlay() {
 	const overlay = new BrowserWindow({
-		title: 'BetterCrewLink Overlay',
+		title: 'BetterCrewLink-沫夏悠轩 Overlay',
 		width: 400,
 		height: 300,
 		webPreferences: {

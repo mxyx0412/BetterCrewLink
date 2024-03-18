@@ -1,6 +1,6 @@
 export default {
-	UNSUPPORTED_VERSION: 'Your version of Among Us is unsupported by BetterCrewLink.\n',
-	OPEN_AS_ADMINISTRATOR: "Error with checking the process:\nCouldn't connect to Among Us.\nPlease re-open BetterCrewLink as Administrator.",
-	LOOKUP_FETCH_ERROR: "Error with fetching lookups:\nPlease check your internet connection.",
-	OFFSETS_FETCH_ERROR: "Error with fetching offsets:\nPlease check your internet connection.",
+	UNSUPPORTED_VERSION: '你的AmongUs版本BetterCrewLink不支持\n',
+	OPEN_AS_ADMINISTRATOR: "错误:请检查进程:\n未连接到Among Us.\n请以管理员模式运行BetterCrewLink",
+	LOOKUP_FETCH_ERROR: "错误:未获取到信息文件 :\n请检查您的网络或获取URL.",
+	OFFSETS_FETCH_ERROR: "错误:未获取到偏移值文件:\n请检查您的网络或获取URL.",
 };

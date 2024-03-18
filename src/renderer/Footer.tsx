@@ -48,7 +48,7 @@ const RawFooter: React.FC = function () {
 						shell.openExternal('https://discord.gg/qDqTzvj4SH');
 					}}
 				>
-					<Tooltip title="Join our Discord for support" arrow>
+					<Tooltip title="加入我们的Discord" arrow>
 						<svg viewBox="0 0 245 240" width={36} height={36}>
 							<path
 								fill="#7289DA"
@@ -67,7 +67,7 @@ const RawFooter: React.FC = function () {
 						shell.openExternal('https://ko-fi.com/ohmyguus');
 					}}
 				>
-					<Tooltip title="Donate to support us!" arrow>
+					<Tooltip title="赞助我们!" arrow>
 						<svg width={36} height={36} viewBox="0 0 24 24">
 							<path
 								fill="#d4af37"
