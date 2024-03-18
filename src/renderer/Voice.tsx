@@ -27,6 +27,8 @@ import { validateClientPeerConfig } from './validateClientPeerConfig';
 // @ts-ignore
 import reverbOgx from 'arraybuffer-loader!../../static/sounds/reverb.ogx'; // @ts-ignore
 import radioOnSound from '../../static/sounds/radio_on.wav'; // @ts-ignore
+import EnableDeadPlayer from '../../static/images/button/EnableDeadPlayerButton.png'; // @ts-ignore
+import DisableDeadPlayer from '../../static/images/button/DisableDeadPlayerButton.png'; // @ts-ignore
 
 import { CameraLocation, AmongUsMaps, MapType } from '../common/AmongusMap';
 import { ObsVoiceState } from '../common/ObsOverlay';
@@ -90,6 +92,7 @@ interface ConnectionStuff {
 	impostorRadio: boolean | null;
 	toggleMute: () => void;
 	toggleDeafen: () => void;
+	toggleMuteDead: () => void;
 }
 
 interface SocketError {
@@ -152,6 +155,8 @@ const useStyles = makeStyles((theme) => ({
 		fontSize: 20,
 		whiteSpace: 'nowrap',
 		maxWidth: '115px',
+		overflow: 'hidden',
+		paddingTop: '15px',
 	},
 	code: {
 		fontFamily: "'Source Code Pro', monospace",
@@ -185,7 +190,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 	muteButtons: {
 		paddingLeft: '5px',
-		paddingTop: '26px',
+		paddingTop: '5px',
 		float: 'right',
 		display: 'grid',
 	},
@@ -262,6 +267,7 @@ const Voice: React.FC<VoiceProps> = function ({ t, error: initialError }: VoiceP
 
 	const [deafenedState, setDeafened] = useState(false);
 	const [mutedState, setMuted] = useState(false);
+	const [MuteOtherDeadPlayers, setDead] = useState(true);
 	const [connected, setConnected] = useState(false);
 
 	function applyEffect(gain: AudioNode, effectNode: AudioNode, destination: AudioNode, player: Player) {
@@ -374,7 +380,7 @@ const Voice: React.FC<VoiceProps> = function ({ t, error: initialError }: VoiceP
 				if (!me.isDead && other.isDead) {
 					endGain = 0;
 				}
-				if (me.isDead && other.isDead && connectionStuff.current.muted && connectionStuff.current.MuteOtherDeadPlayers) {
+				if (me.isDead && other.isDead && connectionStuff.current.MuteOtherDeadPlayers) {
 					endGain = 0;
 				}
 				break;
@@ -732,6 +738,9 @@ const Voice: React.FC<VoiceProps> = function ({ t, error: initialError }: VoiceP
 		toggleDeafen: () => {
 			/*empty*/
 		},
+		toggleMuteDead: () => {
+			/*empty*/
+		},
 	});
 
 	useEffect(() => {
@@ -938,6 +947,11 @@ const Voice: React.FC<VoiceProps> = function ({ t, error: initialError }: VoiceP
 				setDeafened(connectionStuff.current.deafened);
 			};
 
+			connectionStuff.current.toggleMuteDead = () => {
+				connectionStuff.current.MuteOtherDeadPlayers = !connectionStuff.current.MuteOtherDeadPlayers;
+				setDead(connectionStuff.current.muteDead);
+			}
+
 			ipcRenderer.on(IpcRendererMessages.TOGGLE_DEAFEN, connectionStuff.current.toggleDeafen);
 
 			ipcRenderer.on(IpcRendererMessages.IMPOSTOR_RADIO, (_: unknown, pressing: boolean) => {
@@ -945,14 +959,7 @@ const Voice: React.FC<VoiceProps> = function ({ t, error: initialError }: VoiceP
 			});
 
 			ipcRenderer.on(IpcRendererMessages.MUTE_OTHER_DEAD_PLAYERS, (_: unknown) =>{
-				if (connectionStuff.current.MuteOtherDeadPlayers)
-				{
-					connectionStuff.current.MuteOtherDeadPlayers = false;
-				}
-				else
-				{
-					connectionStuff.current.MuteOtherDeadPlayers = true;
-				}
+        connectionStuff.current.toggleMuteDead();
 			})
 
 			ipcRenderer.on(IpcRendererMessages.TOGGLE_MUTE, connectionStuff.current.toggleMute);
@@ -1401,6 +1408,9 @@ const Voice: React.FC<VoiceProps> = function ({ t, error: initialError }: VoiceP
 							</div>
 							{gameState.lobbyCode !== 'MENU' && (
 								<div className={classes.muteButtons}>
+									<IconButton onClick={connectionStuff.current.toggleMuteDead} size="small">
+										{MuteOtherDeadPlayers ? <img src={DisableDeadPlayer} style={{ width: '20px', height: '20px' }} /> : <img src={EnableDeadPlayer} style={{ width: '20px', height: '20px' }} />}
+									</IconButton>
 									<IconButton onClick={connectionStuff.current.toggleMute} size="small">
 										{mutedState || deafenedState ? <MicOff /> : <Mic />}
 									</IconButton>
