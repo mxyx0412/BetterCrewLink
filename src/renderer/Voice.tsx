@@ -88,7 +88,7 @@ interface ConnectionStuff {
 	pushToTalkMode: number;
 	deafened: boolean;
 	muted: boolean;
-	muteDead: boolean,
+	MuteOtherDeadPlayers: boolean;
 	impostorRadio: boolean | null;
 	toggleMute: () => void;
 	toggleDeafen: () => void;
@@ -267,7 +267,7 @@ const Voice: React.FC<VoiceProps> = function ({ t, error: initialError }: VoiceP
 
 	const [deafenedState, setDeafened] = useState(false);
 	const [mutedState, setMuted] = useState(false);
-	const [muteDead, setDead] = useState(true);
+	const [MuteOtherDeadPlayers, setDead] = useState(true);
 	const [connected, setConnected] = useState(false);
 
 	function applyEffect(gain: AudioNode, effectNode: AudioNode, destination: AudioNode, player: Player) {
@@ -373,13 +373,14 @@ const Voice: React.FC<VoiceProps> = function ({ t, error: initialError }: VoiceP
 					}
 				}
 				break;
+
 			case GameState.DISCUSSION:
 				panPos = [0, 0];
 				endGain = 1;
 				if (!me.isDead && other.isDead) {
 					endGain = 0;
 				}
-				if (me.isDead && other.isDead && connectionStuff.current.muteDead) {
+				if (me.isDead && other.isDead && connectionStuff.current.MuteOtherDeadPlayers) {
 					endGain = 0;
 				}
 				break;
@@ -729,8 +730,8 @@ const Voice: React.FC<VoiceProps> = function ({ t, error: initialError }: VoiceP
 		pushToTalkMode: settings.pushToTalkMode,
 		deafened: false,
 		muted: false,
-		muteDead: true,
 		impostorRadio: null,
+		MuteOtherDeadPlayers: true,
 		toggleMute: () => {
 			/*empty*/
 		},
@@ -947,7 +948,7 @@ const Voice: React.FC<VoiceProps> = function ({ t, error: initialError }: VoiceP
 			};
 
 			connectionStuff.current.toggleMuteDead = () => {
-				connectionStuff.current.muteDead = !connectionStuff.current.muteDead;
+				connectionStuff.current.MuteOtherDeadPlayers = !connectionStuff.current.MuteOtherDeadPlayers;
 				setDead(connectionStuff.current.muteDead);
 			}
 
@@ -956,6 +957,10 @@ const Voice: React.FC<VoiceProps> = function ({ t, error: initialError }: VoiceP
 			ipcRenderer.on(IpcRendererMessages.IMPOSTOR_RADIO, (_: unknown, pressing: boolean) => {
 				connectionStuff.current.impostorRadio = pressing;
 			});
+
+			ipcRenderer.on(IpcRendererMessages.MUTE_OTHER_DEAD_PLAYERS, (_: unknown) =>{
+        connectionStuff.current.toggleMuteDead();
+			})
 
 			ipcRenderer.on(IpcRendererMessages.TOGGLE_MUTE, connectionStuff.current.toggleMute);
 			ipcRenderer.on(IpcRendererMessages.PUSH_TO_TALK, (_: unknown, pressing: boolean) => {
@@ -1404,7 +1409,7 @@ const Voice: React.FC<VoiceProps> = function ({ t, error: initialError }: VoiceP
 							{gameState.lobbyCode !== 'MENU' && (
 								<div className={classes.muteButtons}>
 									<IconButton onClick={connectionStuff.current.toggleMuteDead} size="small">
-										{muteDead ? <img src={DisableDeadPlayer} style={{ width: '20px', height: '20px' }} /> : <img src={EnableDeadPlayer} style={{ width: '20px', height: '20px' }} />}
+										{MuteOtherDeadPlayers ? <img src={DisableDeadPlayer} style={{ width: '20px', height: '20px' }} /> : <img src={EnableDeadPlayer} style={{ width: '20px', height: '20px' }} />}
 									</IconButton>
 									<IconButton onClick={connectionStuff.current.toggleMute} size="small">
 										{mutedState || deafenedState ? <MicOff /> : <Mic />}

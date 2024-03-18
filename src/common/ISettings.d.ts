@@ -7,6 +7,8 @@ export interface ISettings {
 	speaker: string;
 	pushToTalkMode: number;
 	serverURL: string;
+	CDN_Url: string;
+	Cosmetics_Url: string;
 	pushToTalkShortcut: string;
 	deafenShortcut: string;
 	muteShortcut: string;

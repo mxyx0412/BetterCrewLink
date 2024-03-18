@@ -33,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
+
 export interface MenuProps {
 	t: (key: string) => string;
 	error: string;

@@ -4,6 +4,7 @@ import rainbowAliveimg from '../../static/images/avatar/rainbow-alive.png'; // @
 import rainbowDeadeimg from '../../static/images/avatar/rainbow-dead.png';
 
 import { ModsType } from '../common/Mods';
+import SettingsStore from './settings/SettingsStore';
 export const redAlive = redAliveimg;
 
 export enum cosmeticType {
@@ -45,7 +46,9 @@ export function initializeHats() {
 		return;
 	}
 	requestingHats = true;
-	fetch(`${HAT_COLLECTION_URL}/hats.json`)
+	const GetUrl = SettingsStore.get('Cosmetics_Url', 'nullUrl');
+	const Hat_Url = GetUrl == 'nullUrl' ? HAT_COLLECTION_URL : GetUrl;
+	fetch(`${Hat_Url}/hats.json`)
 		.then((response) => response.json())
 		.then((data) => {
 			hatCollection = data;
@@ -54,17 +57,19 @@ export function initializeHats() {
 	return undefined;
 }
 
-const HAT_COLLECTION_URL =  'https://cdn.jsdelivr.net/gh/OhMyGuus/BetterCrewLink-Hats@master/'; //'https://raw.githubusercontent.com/OhMyGuus/BetterCrewlink-Hats/master';
+const HAT_COLLECTION_URL = 'https://github.moeyy.xyz/https://raw.githubusercontent.com/OhMyGuus/BetterCrewlink-Hats/master/'; //'https://raw.githubusercontent.com/OhMyGuus/BetterCrewlink-Hats/master';
 function getModHat(color: number, id = '', mod: ModsType, back = false) {
 	if (!initializedHats) {
 		return '';
 	}
+	const GetUrl = SettingsStore.get('Cosmetics_Url', 'nullUrl');
+	const Hat_Url = GetUrl == 'nullUrl' ? HAT_COLLECTION_URL : GetUrl;
 	const hatBase = getHat(id, mod);
 	const hat = back ? hatBase?.back_image : hatBase?.image;
 	const multiColor = hatBase?.multi_color;
 	if (hat && hatBase) {
-		if (!multiColor) return `${HAT_COLLECTION_URL}${hatBase.mod}/${hat}`;
-		else return `generate:///${HAT_COLLECTION_URL}${hatBase.mod}/${hat}?color=${color}`;
+		if (!multiColor) return `${Hat_Url}${hatBase.mod}/${hat}`;
+		else return `generate:///${Hat_Url}${hatBase.mod}/${hat}?color=${color}`;
 	}
 	return undefined;
 }
