@@ -148,7 +148,7 @@ const lookupStore = new Store<IOffsetsLookup>({name: "lookup"});
 async function fetchOffsetLookupJson(error: boolean = false): Promise<IOffsetsLookup> {
 	const GetUrl = SettingsStore.get('CDN_Url', 'nullUrl');
 	const CDN_Url = GetUrl == 'nullUrl' ? BASE_URL : GetUrl;
-	const url = error ? BASE_URL_error : CDN_Url;
+	const url = error ? CDN_Url : BASE_URL_error;
     return fetch(`${url}/lookup.json`)
         .then((response) => response.json())
         .then((data) => { return data as IOffsetsLookup })
