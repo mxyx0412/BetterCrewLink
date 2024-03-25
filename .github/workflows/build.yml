@@ -90,3 +90,10 @@ jobs:
           name: BetterCrewLink Installer ${{ runner.os }} x32 + x64
           path: ${{ matrix.installer }}
           if-no-files-found: error
+
+      - name: Upload Unpacked
+        uses: actions/upload-artifact@v2
+        if: ${{ matrix.os == 'windows-latest'}}
+        with:
+          name: BetterCrewLink Unpacked 64bit 
+          path: 'dist/win-unpacked'
